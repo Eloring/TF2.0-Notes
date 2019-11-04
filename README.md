@@ -13,20 +13,22 @@
 8. [TensorFlow Serving](),[TensorFlow Lite](), [TensorFlow.js]() and Swift for TensorFlow (future)
 9. API Cleanup
 
-### tf.keras vs. Keras
+## 2. Test Result
 
-
-### Eager Execution vs. Graph Execution
+### Eager Execution, Graph Execution and tf.function(AutoGraph)
 
 1. 传统的TensorFlow开发使用Graph Execution，首先通过变量和Placeholder来定义一个计算图，然后启动一个Session，通过TensorFlow引擎来执行这个计算图，最后给出我们需要的结果。不能实时计算、调试困难、灵活性差、无法使用 Python 原生控制语句。
-2. Eager Execution（eg. PyTorch）无需构建图，操作返回具体值，而不是构建计算图以便稍后运行。
+2. Eager Execution无需构建图，操作返回具体值，而不是构建计算图以便稍后运行，python式方便调试。
+3. 理想情况下, tf.function能让我们实现用动态图写(方便, 灵活), 用静态图跑(高效, 稳定)。理论上静态图的执行效率更高, 但是加速并不是一定的. 一般来说, 计算图越复杂, 加速效果越明显. 对于复杂的计算图, 比如训练深度学习模型, 获得的加速是巨大的. 
 
+4. result
+	| mode | model |latency (s)|
+	| :----:  | :----: | :----: |
+	| Graph Execution | Linear regression | 5.3317999839782715 |
+	| Eager Execution | - | 22.863434553146362 |
+	| tf.function | - | 3.6043503284454346 |
 
-### tf.function and AutoGraph
-理想情况下, 能让我们实现用动态图写(方便, 灵活), 用静态图跑(高效, 稳定)。
-
-
-## 2. Concise Handbook of TF2
+## 3. Concise Handbook of TF2
 [TF2.0 wiki](https://tf.wiki/index.html)
 
 - 模型的建立与调试： 使用动态图模式 **Eager Execution** 和高级 API 框架 **Keras**，结合可视化工具 **TensorBoard**，简易、快速地建立和调试模型；
@@ -134,7 +136,7 @@
 - GPU acceleration： CNN>RNN>RL
 	
 
-## 3. Model optimization
+## 4. Model optimization
 
 ### TensorFlow Model Optimization Toolkit
 
@@ -171,27 +173,24 @@
 
 ### TFTRT
 
-  ~~~
-  import tensorflow as tf
-  from tensorflow.python.compiler.tensorrt import trt_convert as trt
-  '''
-  DEFAULT_TRT_CONVERSION_PARAMS = trt.TrtConversionParams(
-    rewriter_config_template=None,
-    max_workspace_size_bytes=DEFAULT_TRT_MAX_WORKSPACE_SIZE_BYTES,
-    precision_mode=TrtPrecisionMode.FP32,
-    minimum_segment_size=3,
-    is_dynamic_op=True,
-    maximum_cached_engines=1,
-    use_calibration=True,
-    max_batch_size=1)
-  '''
-  params = trt.DEFAULT_TRT_CONVERSION_PARAMS._replace(
-         precision_mode='FP16')
-  converter = trt.TrtGraphConverterV2(
-         input_saved_model_dir="my_dir", conversion_params=params)
-  converter.convert()
-  converter.save(output_saved_model_dir)
-  ~~~
-
-## 4. Test Result
-
+	  ~~~
+	  import tensorflow as tf
+	  from tensorflow.python.compiler.tensorrt import trt_convert as trt
+	  '''
+	  DEFAULT_TRT_CONVERSION_PARAMS = trt.TrtConversionParams(
+	    rewriter_config_template=None,
+	    max_workspace_size_bytes=DEFAULT_TRT_MAX_WORKSPACE_SIZE_BYTES,
+	    precision_mode=TrtPrecisionMode.FP32,
+	    minimum_segment_size=3,
+	    is_dynamic_op=True,
+	    maximum_cached_engines=1,
+	    use_calibration=True,
+	    max_batch_size=1)
+	  '''
+	  params = trt.DEFAULT_TRT_CONVERSION_PARAMS._replace(
+		 precision_mode='FP16')
+	  converter = trt.TrtGraphConverterV2(
+		 input_saved_model_dir="my_dir", conversion_params=params)
+	  converter.convert()
+	  converter.save(output_saved_model_dir)
+	  ~~~
