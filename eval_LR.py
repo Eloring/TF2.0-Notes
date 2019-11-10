@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np
 import time
 
-"""Simple test focused on new features of TF 2.0
+"""Simple test of Linear regression focused on new features of TF 2.0
 
 - Eager Execution vs. Graph Execution
 
@@ -67,7 +67,7 @@ def eager_execution():
 
 # test the performance improvement under tf.function		
 @tf.function
-def train_one_step(X, y, variables):
+def train_one_step(X, y, variables, optimizer):
 	with tf.GradientTape() as tape:
 		y_pred = variables[0] * X + variables[1]
 		loss = 0.5 * tf.reduce_sum(tf.square(y_pred - y))
@@ -86,7 +86,7 @@ def tf_function():
 	optimizer = tf.keras.optimizers.SGD(learning_rate=1e-3)
 	start_time = time.time()
 	for e in range(num_epoch):
-		train_one_step(X, y, variables)
+		train_one_step(X, y, variables, optimizer)
 	print(a, b)
 	print("@tf.function: ", time.time()-start_time)
 
