@@ -25,9 +25,15 @@
 
 	| mode | model |latency (s)|
 	| :----:  | :----: | :----: |
-	| Graph Execution | Linear regression | 5.3317999839782715 |
-	| Eager Execution | - | 22.863434553146362 |
-	| tf.function | - | 3.6043503284454346 |
+	| Graph Execution | Linear regression | 5.3318 |
+	| Eager Execution | - | 22.86348 |
+	| @tf.function | - | 3.6044 |
+	| Graph Execution | ResNet50 | 90.0217 |
+	| Eager Execution | - | 73.2952 |
+	| @tf.function | - | 89.2848 |
+	| Graph Execution | MobileNetV2 | 55.5317 |
+	| Eager Execution | - | 32.5839 |
+	| @tf.function | - | 49.7439 |
 
 ## 3. Concise Handbook of TF2
 [TF2.0 wiki](https://tf.wiki/index.html)
