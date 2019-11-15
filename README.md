@@ -178,6 +178,16 @@
 	tflite_quant_model = converter.convert()
 	~~~
 
+- Test result
+
+	| model | size | compression | accuracy | latency |
+	| :----:  | :----: | :----: | :----: | :----: |
+	| original | 12.52 Mb | 11.59 Mb | 0.9922 | 0.5638 |
+	| pruning | 12.52 Mb | 2.52 Mb | 0.9940 | 0.6809 |
+	| tf-lite | 12.49 Mb | 2.44 Mb | 0.9934 | 10.1111 |
+	| Quant-float16(tf-lite) | 6.25 Mb | 1.55 Mb | 0.9934 | 9.6458 |
+	| Quant-int8(tf-lite) | 3.13 Mb | 0.59 Mb | 0.9933 | 10.5215 |
+
 ### TFTRT
 
 	  ~~~
